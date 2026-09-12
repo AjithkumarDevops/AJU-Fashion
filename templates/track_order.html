@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AJU FASHION - Track Order</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .tracking-box {
+            background: white;
+            max-width: 650px;
+            margin: auto;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .tracking-box h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .tracking-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .track-button {
+            width: 100%;
+        }
+
+        .error-message {
+            background: #ffe5e5;
+            color: #cc0000;
+            padding: 12px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .order-info {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid #ddd;
+        }
+
+        .order-info p {
+            margin-bottom: 10px;
+        }
+
+        .timeline {
+            margin-top: 30px;
+        }
+
+        .timeline-step {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background: #eee;
+            font-weight: bold;
+        }
+
+        .timeline-step.active {
+            background: #111;
+            color: white;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #111;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+
+        <div class="container">
+
+            <h1>AJU FASHION</h1>
+
+            <p>Track Your Order</p>
+
+        </div>
+
+    </header>
+
+
+    <section class="container" style="padding: 60px 0;">
+
+        <div class="tracking-box">
+
+            <h2>Track Your Order</h2>
+
+
+            <form action="/track-order" method="POST">
+
+                <label>
+                    <strong>Enter Order ID</strong>
+                </label>
+
+                <input
+                    type="number"
+                    name="order_id"
+                    class="tracking-input"
+                    required
+                    placeholder="Example: 1"
+                    min="1"
+                >
+
+                <button
+                    type="submit"
+                    class="track-button"
+                >
+                    Track Order
+                </button>
+
+            </form>
+
+
+            {% if error %}
+
+            <div class="error-message" style="margin-top: 25px;">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            {% if order %}
+
+            <div class="order-info">
+
+                <h3>
+                    Order #{{ order['id'] }}
+                </h3>
+
+                <br>
+
+                <p>
+                    <strong>Customer:</strong>
+                    {{ order['customer_name'] }}
+                </p>
+
+                <p>
+                    <strong>Products:</strong>
+                    {{ order['products'] }}
+                </p>
+
+                <p>
+                    <strong>Total:</strong>
+                    ₹{{ order['total'] }}
+                </p>
+
+                <p>
+                    <strong>Payment:</strong>
+                    {{ order['payment_method'] }}
+                </p>
+
+                <p>
+                    <strong>Order Date:</strong>
+                    {{ order['order_date'] }}
+                </p>
+
+
+                <!-- ORDER TIMELINE -->
+
+                <div class="timeline">
+
+                    <h3 style="margin-bottom: 20px;">
+                        Order Status
+                    </h3>
+
+
+                    <div class="
+                        timeline-step
+                        {% if order['status'] in ['NEW', 'CONFIRMED', 'SHIPPED', 'DELIVERED'] %}
+                        active
+                        {% endif %}
+                    ">
+                        1. Order Placed
+                    </div>
+
+
+                    <div class="
+                        timeline-step
+                        {% if order['status'] in ['CONFIRMED', 'SHIPPED', 'DELIVERED'] %}
+                        active
+                        {% endif %}
+                    ">
+                        2. Confirmed
+                    </div>
+
+
+                    <div class="
+                        timeline-step
+                        {% if order['status'] in ['SHIPPED', 'DELIVERED'] %}
+                        active
+                        {% endif %}
+                    ">
+                        3. Shipped
+                    </div>
+
+
+                    <div class="
+                        timeline-step
+                        {% if order['status'] == 'DELIVERED' %}
+                        active
+                        {% endif %}
+                    ">
+                        4. Delivered
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <a href="/" class="back-link">
+                ← Continue Shopping
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+
+        <div class="container">
+
+            <p>
+                © 2026 AJU FASHION
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>
