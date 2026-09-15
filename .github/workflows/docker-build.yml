@@ -14,6 +14,7 @@ permissions:
 
 env:
   AWS_REGION: us-east-1
+  EC2_REGION: ap-south-1
   ECR_REPOSITORY: aju-fashion
   EC2_INSTANCE_ID: i-05abd506f8e7ca8f0
 
@@ -62,4 +63,4 @@ jobs:
               "sudo docker rm aju-fashion || true",
               "sudo docker run -d --name aju-fashion -p 5000:5000 236087862934.dkr.ecr.us-east-1.amazonaws.com/aju-fashion:latest"
             ]' \
-            --region "${{ env.AWS_REGION }}"
+            --region "${{ env.EC2_REGION }}"
